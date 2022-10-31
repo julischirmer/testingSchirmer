@@ -1,0 +1,9 @@
+[
+  {
+    "postId": "type:Integer",
+    "id": "type:Integer",
+    "name": "type:String",
+    "email": "regex:[a-zA-Z\\d\\_\\.]+@[a-z]+\\.[a-z]{2,4}",
+    "body": "type:String"
+  }
+]
