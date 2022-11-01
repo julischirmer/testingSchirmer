@@ -1,5 +1,6 @@
 package com.solvd.carina.demo.gui.components;
 
+import com.solvd.carina.demo.gui.pages.PrivacyPage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -14,7 +15,10 @@ public class FooterMenu extends AbstractUIObject {
     @FindBy(linkText = "Home")
     private ExtendedWebElement homeLink;
 
-    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(text(),'Compare')]")
+    @FindBy(xpath = "//div[@class='KxwPGc iTjxkf']//a[contains(text(),'Privacidad')]")
+    private ExtendedWebElement privacyLink;
+
+    @FindBy(xpath = "//div[@class='KxwPGc iTjxkf']//a[contains(text(),'Privacidad')]")
     private ExtendedWebElement compareLink;
     
     @FindBy(linkText = "News")
@@ -37,5 +41,10 @@ public class FooterMenu extends AbstractUIObject {
     public NewsPage openNewsPage() {
         newsLink.click();
         return new NewsPage(driver);
+    }
+
+    public PrivacyPage openPrivacyPage() {
+        privacyLink.click();
+        return new PrivacyPage(driver);
     }
 }
