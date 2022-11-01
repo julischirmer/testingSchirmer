@@ -8,8 +8,9 @@ import com.qaprosoft.carina.core.foundation.utils.ownership.MethodOwner;
 import com.qaprosoft.carina.core.foundation.utils.tag.Priority;
 import com.qaprosoft.carina.core.foundation.utils.tag.TestPriority;
 import com.solvd.carina.demo.api.*;
-import com.jayway.jsonpath.JsonPath;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.openqa.selenium.json.Json;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,25 +54,22 @@ public class APITestingComments implements IAbstractTest {
 
     @Test()
     @MethodOwner(owner = "jschirmer")
-    public void testPatchComment(String postId) throws Exception {
+    public void testPatchComment() throws Exception {
         PostCommentMethod api = new PostCommentMethod();
         api.getProperties().remove("postId");
 
         api.expectResponseStatus(HttpResponseStatusType.CREATED_201);
         Response response = api.callAPI();
-        String id = JsonPath.read(response, postId);
-        api.callAPI();
-        api.validateResponse();
+        JsonPath jsonPathEvaluator = response.jsonPath();
 
-        api.expectResponseStatus(HttpResponseStatusType.CREATED_201);
+        PatchCommentMethod apiPatch = new PatchCommentMethod(jsonPathEvaluator.getString("postId"));
 
-        // io.restassured.path.json.JsonPath extractor = response.jsonPath();
+        //String id = JsonPath.read(response, id);
 
-        //PatchCommentMethod apiPatch = new PatchCommentMethod(extractor.getString("id"));
+        apiPatch.expectResponseStatus(HttpResponseStatusType.OK_200);
+        apiPatch.callAPI();
+        apiPatch.validateResponse();
 
-        //apiPatch.expectResponseStatus(HttpResponseStatusType.OK_200);
-        //apiPatch.callAPI();
-        //apiPatch.validateResponse();
     }
 
     @Test()
