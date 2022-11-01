@@ -1,1 +1,5 @@
-{}
+{
+  "name": "new Name",
+  "email" : "newmail@mail.com",
+  "body" : "new word!"
+}
