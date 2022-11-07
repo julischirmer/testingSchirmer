@@ -10,7 +10,7 @@ import com.qaprosoft.carina.core.foundation.api.http.HttpMethodType;
 import com.qaprosoft.carina.core.foundation.api.http.HttpResponseStatusType;
 import com.qaprosoft.carina.core.foundation.utils.Configuration;
 
-@Endpoint(url = "${base_url}/comments/${postId}", methodType = HttpMethodType.GET)
+@Endpoint(url = "${base_url}/comments/${id}", methodType = HttpMethodType.PATCH)
 @ResponseTemplatePath(path = "api2/comments/_patch/rs.json")
 @RequestTemplatePath(path = "api2/comments/_patch/rq.json")
 @SuccessfulHttpStatus(status = HttpResponseStatusType.OK_200)
@@ -21,9 +21,9 @@ public class PatchCommentMethod extends AbstractApiMethodV2 {
         setProperties("api2/comments/comment.properties");
     }
 
-    public PatchCommentMethod(String postId) {
+    public PatchCommentMethod(String id) {
         replaceUrlPlaceholder("base_url", Configuration.getEnvArg("api_url"));
-        replaceUrlPlaceholder("id", postId);
+        replaceUrlPlaceholder("id", id);
         setProperties("api2/comments/comment.properties");
     }
 

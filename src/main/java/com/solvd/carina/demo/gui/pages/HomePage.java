@@ -20,9 +20,6 @@ import com.solvd.carina.demo.gui.components.WeValuePrivacyAd;
 public class HomePage extends AbstractPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @FindBy(xpath = "/html/body/div[1]/div[5]/div[2]/div[2]/a[1]")
-    private ExtendedWebElement privacyBtn;
-
     @FindBy(id = "footmenu")
     private FooterMenu footerMenu;
 
@@ -34,7 +31,8 @@ public class HomePage extends AbstractPage {
 
     public HomePage(WebDriver driver) {
         super(driver);
-        setPageOpeningStrategy(PageOpeningStrategy.BY_URL);
+        setUiLoadedMarker(newsColumn);
+        setPageAbsoluteURL(R.CONFIG.get(Configuration.Parameter.URL.getKey()));
     }
 
     public FooterMenu getFooterMenu() {
@@ -53,13 +51,8 @@ public class HomePage extends AbstractPage {
         }
         throw new RuntimeException("Unable to open brand: " + brand);
     }
-    
-    public WeValuePrivacyAd getWeValuePrivacyAd() {
-    	return new WeValuePrivacyAd(driver);
-    }
 
-    public PrivacyPage openPrivacyPage() {
-        privacyBtn.click();
-        return new PrivacyPage(driver);
+    public WeValuePrivacyAd getWeValuePrivacyAd() {
+        return new WeValuePrivacyAd(driver);
     }
 }

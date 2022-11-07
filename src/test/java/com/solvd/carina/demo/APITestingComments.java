@@ -8,9 +8,8 @@ import com.qaprosoft.carina.core.foundation.utils.ownership.MethodOwner;
 import com.qaprosoft.carina.core.foundation.utils.tag.Priority;
 import com.qaprosoft.carina.core.foundation.utils.tag.TestPriority;
 import com.solvd.carina.demo.api.*;
-import io.restassured.path.json.JsonPath;
+import com.jayway.jsonpath.JsonPath;
 import io.restassured.response.Response;
-import org.openqa.selenium.json.Json;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class APITestingComments implements IAbstractTest {
 
     @Test()
     @MethodOwner(owner = "jschirmer")
-    public void testPostComment() throws Exception {
+    public void testPostComment() {
 
         PostCommentMethod api = new PostCommentMethod();
         AtomicInteger counter = new AtomicInteger(0);
@@ -42,30 +41,27 @@ public class APITestingComments implements IAbstractTest {
 
     @Test()
     @MethodOwner(owner = "jschirmer")
-    public void testPostCommentWithMissingSomeFields() throws Exception {
+    public void testPostCommentWithMissingSomeFields() {
         PostCommentMethod api = new PostCommentMethod();
         api.getProperties().remove("postId");
         api.expectResponseStatus(HttpResponseStatusType.CREATED_201);
-        //String response = api.callAPI().asString();
-        //String id = JsonPath.read(response, "");
         api.callAPI();
         api.validateResponse();
     }
 
     @Test()
     @MethodOwner(owner = "jschirmer")
-    public void testPatchComment() throws Exception {
+    public void testPatchComment() {
         PostCommentMethod api = new PostCommentMethod();
-        api.getProperties().remove("postId");
+        Response postResponse = api.callAPIExpectSuccess();
+        LOGGER.info("Response a :" + postResponse.asString());
+        api.validateResponse();
 
-        api.expectResponseStatus(HttpResponseStatusType.CREATED_201);
-        Response response = api.callAPI();
-        JsonPath jsonPathEvaluator = response.jsonPath();
+        Integer id = JsonPath.read(postResponse.asString(), "id");
+        String idString = id.toString();
+        LOGGER.info("id:" + idString);
 
-        PatchCommentMethod apiPatch = new PatchCommentMethod(jsonPathEvaluator.getString("postId"));
-
-        //String id = JsonPath.read(response, id);
-
+        PatchCommentMethod apiPatch = new PatchCommentMethod(idString);
         apiPatch.expectResponseStatus(HttpResponseStatusType.OK_200);
         apiPatch.callAPI();
         apiPatch.validateResponse();
